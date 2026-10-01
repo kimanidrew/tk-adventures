@@ -1,0 +1,5 @@
+import {S3Client,PutObjectCommand} from "@aws-sdk/client-s3";import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
+const account=process.env.R2_ACCOUNT_ID,bucket=process.env.R2_BUCKET_NAME,publicUrl=process.env.R2_PUBLIC_URL?.replace(/\/$/,"");
+export function r2Configured(){return Boolean(account&&bucket&&process.env.R2_ACCESS_KEY_ID&&process.env.R2_SECRET_ACCESS_KEY&&publicUrl)}
+const client=new S3Client({region:"auto",endpoint:account?"https://"+account+".r2.cloudflarestorage.com":"https://example.invalid",credentials:{accessKeyId:process.env.R2_ACCESS_KEY_ID||"missing",secretAccessKey:process.env.R2_SECRET_ACCESS_KEY||"missing"}});
+export async function createUploadUrl(key:string,contentType:string){if(!bucket||!publicUrl)throw new Error("R2 not configured");const url=await getSignedUrl(client,new PutObjectCommand({Bucket:bucket,Key:key,ContentType:contentType}),{expiresIn:900});return {uploadUrl:url,publicUrl:publicUrl+"/"+key}}

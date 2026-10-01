@@ -1,0 +1,3 @@
+import type {Metadata} from "next";import "./globals.css";import {Navbar} from "@/components/Navbar";import {Footer} from "@/components/Footer";
+export const metadata:Metadata={title:{default:"TK Adventures | Travel Beyond Ordinary",template:"%s | TK Adventures"},description:"Kenyan travel and tour agency creating memorable adventures across Kenya, Africa and the world.",icons:{icon:"/tk-logo.svg"}};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en"><body><Navbar/>{children}<Footer/></body></html>}

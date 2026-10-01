@@ -1,0 +1,7 @@
+datasource db { provider="postgresql" url=env("DATABASE_URL") }
+generator client { provider="prisma-client-js" }
+enum MediaType { IMAGE VIDEO }
+enum TravelCategory { SAFARI BEACH HIKING CITY HONEYMOON FAMILY INTERNATIONAL OTHER }
+model Travel { id String @id @default(cuid()) title String slug String @unique destination String country String? category TravelCategory @default(OTHER) duration String? price Int? currency String @default("KES") excerpt String? description String? featured Boolean @default(false) published Boolean @default(true) coverImage String? coverKey String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt media TravelMedia[] }
+model TravelMedia { id String @id @default(cuid()) travelId String type MediaType url String key String? alt String? sortOrder Int @default(0) travel Travel @relation(fields:[travelId],references:[id],onDelete:Cascade) @@index([travelId,sortOrder]) }
+model Inquiry { id String @id @default(cuid()) name String email String phone String? travel String? message String createdAt DateTime @default(now()) handled Boolean @default(false) @@index([createdAt]) }

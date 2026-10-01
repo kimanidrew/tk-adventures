@@ -1,0 +1,5 @@
+import {cookies} from "next/headers";import {jwtVerify,SignJWT} from "jose";
+const secret=new TextEncoder().encode(process.env.AUTH_SECRET||"dev-only-change-me");const COOKIE="tk_admin_session";
+export async function createAdminSession(email:string){const token=await new SignJWT({role:"ADMIN",email}).setProtectedHeader({alg:"HS256"}).setIssuedAt().setExpirationTime("7d").sign(secret);(await cookies()).set(COOKIE,token,{httpOnly:true,secure:process.env.NODE_ENV==="production",sameSite:"lax",path:"/",maxAge:604800})}
+export async function clearAdminSession(){(await cookies()).delete(COOKIE)}
+export async function isAdmin(){try{const token=(await cookies()).get(COOKIE)?.value;if(!token)return false;const {payload}=await jwtVerify(token,secret);return payload.role==="ADMIN"}catch{return false}}

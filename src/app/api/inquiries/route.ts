@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {prisma} from "@/lib/prisma";
+export async function POST(req:Request){const b=await req.json();if(!b.name||!b.email||!b.message)return NextResponse.json({error:"Name, email and message are required"},{status:400});await prisma.inquiry.create({data:{name:b.name,email:b.email,phone:b.phone||null,travel:b.travel||null,message:b.message}});return NextResponse.json({ok:true},{status:201})}
