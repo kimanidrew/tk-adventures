@@ -1,2 +1,26 @@
-import {NextResponse} from "next/server";import {prisma} from "@/lib/prisma";import {isAdmin} from "@/lib/auth";import {slugify} from "@/lib/slug";
-export async function POST(req:Request){if(!await isAdmin())return NextResponse.json({error:"Unauthorized"},{status:401});const b=await req.json();if(!b.title||!b.destination)return NextResponse.json({error:"Title and destination are required"},{status:400});let slug=slugify(b.title);if(await prisma.travel.findUnique({where:{slug}}))slug=slug+"-"+Date.now().toString().slice(-5);const media=Array.isArray(b.media)?b.media:[];const t=await prisma.travel.create({data:{title:b.title,slug,destination:b.destination,country:b.country||null,category:b.category||"OTHER",duration:b.duration||null,price:b.price==null?null:Number(b.price),currency:b.currency||"KES",excerpt:b.excerpt||null,description:b.description||null,featured:Boolean(b.featured),published:b.published!==false,coverImage:b.coverImage||null,coverKey:b.coverKey||null,media:{create:media.map((m:any,i:number)=>({type:m.type,url:m.url,key:m.key||null,alt:m.alt||null,sortOrder:i}))}}});return NextResponse.json(t,{status:201})}
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { isAdmin } from "@/lib/auth";
+import { slugify } from "@/lib/slug";
+
+export async function POST(req: Request) {
+  if (!await isAdmin()) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const b = await req.json();
+  if (!b.title || !b.destination) return NextResponse.json({ error: "Title and destination are required" }, { status: 400 });
+  let slug = slugify(b.title);
+  if (await prisma.travel.findUnique({ where: { slug } })) slug = slug + "-" + Date.now().toString().slice(-5);
+  const media = Array.isArray(b.media) ? b.media : [];
+  const t = await prisma.travel.create({
+    data: {
+      title: b.title, slug, destination: b.destination, country: b.country || null,
+      category: b.category || "OTHER", duration: b.duration || null,
+      travelDate: b.travelDate ? new Date(b.travelDate) : null,
+      price: b.price == null ? null : Number(b.price), currency: b.currency || "KES",
+      excerpt: b.excerpt || null, description: b.description || null,
+      featured: Boolean(b.featured), published: b.published !== false,
+      coverImage: b.coverImage || null, coverKey: b.coverKey || null,
+      media: { create: media.map((m: any, i: number) => ({ type: m.type, url: m.url, key: m.key || null, alt: m.alt || null, sortOrder: i })) },
+    },
+  });
+  return NextResponse.json(t, { status: 201 });
+}
