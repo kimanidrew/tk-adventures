@@ -31,6 +31,7 @@ model Travel {
   country     String?
   category    TravelCategory @default(OTHER)
   duration    String?
+  travelDate  DateTime?
   price       Int?
   currency    String         @default("KES")
   excerpt     String?
