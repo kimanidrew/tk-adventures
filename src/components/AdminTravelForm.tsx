@@ -14,7 +14,7 @@ type Initial = {
   id?: string;
   title?: string;
   destination?: string;
-  country?: string;
+  country?: string | null;
   category?: string;
   duration?: string;
   price?: number | null;
