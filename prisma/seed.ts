@@ -1,4 +1,5 @@
 import { PrismaClient, TravelCategory } from "@prisma/client";
+import { randomBytes, scryptSync } from "node:crypto";
 
 const prisma = new PrismaClient();
 
@@ -201,6 +202,25 @@ const experiences = [
 ];
 
 async function main() {
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    throw new Error(
+      "ADMIN_EMAIL and ADMIN_PASSWORD must be set in .env before running the seed.",
+    );
+  }
+
+  const salt = randomBytes(16).toString("hex");
+  const passwordHash = salt + ":" + scryptSync(adminPassword, salt, 64).toString("hex");
+
+  await prisma.admin.upsert({
+    where: { email: adminEmail },
+    update: { passwordHash },
+    create: { email: adminEmail, passwordHash },
+  });
+
+  console.log("Admin account seeded:", adminEmail);
   for (const travel of travels) {
     await prisma.travel.upsert({
       where: { slug: travel.slug },
