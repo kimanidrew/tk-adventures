@@ -37,6 +37,7 @@ model Travel {
   description String?
   featured    Boolean        @default(false)
   published   Boolean        @default(true)
+  isPast      Boolean        @default(false)
   coverImage  String?
   coverKey    String?
   createdAt   DateTime       @default(now())
@@ -55,6 +56,23 @@ model TravelMedia {
   travel    Travel   @relation(fields: [travelId], references: [id], onDelete: Cascade)
 
   @@index([travelId, sortOrder])
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  destination String?
+  country     String?
+  date        DateTime?
+  excerpt     String?
+  description String?
+  image       String?
+  imageKey    String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Inquiry {
