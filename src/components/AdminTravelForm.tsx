@@ -16,11 +16,11 @@ type Initial = {
   destination?: string;
   country?: string | null;
   category?: string;
-  duration?: string;
+  duration?: string | null;
   price?: number | null;
   currency?: string;
-  excerpt?: string;
-  description?: string;
+  excerpt?: string | null;
+  description?: string | null;
   featured?: boolean;
   published?: boolean;
   coverImage?: string | null;
