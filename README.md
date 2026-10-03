@@ -1,14 +1,14 @@
-# TK Adventures
+# Tripple Tee Travellers
 
-Modern Next.js travel agency website for TK Adventures, a Nairobi-based travel and tour agency.
+Modern Next.js travel website for Tripple Tee Travellers, built around the travel brand behind Instagram **@tripple_tee_travellers**.
 
 ## Stack
 - Next.js App Router + TypeScript
 - Prisma + PostgreSQL
 - Cloudflare R2 direct browser uploads for images and videos
 - Signed admin session with environment credentials
-- Responsive travel catalogue, detail pages and enquiries
-- Transparent TK Adventures logo generated from the supplied logo image and used as navbar mark + favicon
+- Responsive trip catalogue, detail pages and enquiries
+- Tripple Tee Travellers branding and Instagram link
 
 ## Setup
 
@@ -26,13 +26,5 @@ Admin: /admin
 
 R2 uploads use short-lived presigned PUT URLs. Configure the bucket CORS policy to allow PUT/GET/HEAD from your production domain and localhost during development. R2_PUBLIC_URL must point to a public R2/custom-domain URL that can serve uploaded objects.
 
-Example CORS:
-
-    [
-      {
-        "AllowedOrigins": ["https://www.tkadventures.co.ke", "http://localhost:3000"],
-        "AllowedMethods": ["GET", "PUT", "HEAD"],
-        "AllowedHeaders": ["*"],
-        "ExposeHeaders": ["ETag"]
-      }
-    ]
+The public brand Instagram page is:
+https://www.instagram.com/tripple_tee_travellers/
